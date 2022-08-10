@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,6 +15,8 @@ class ProductController extends Controller
     public function index()
     {
         //
+        $data = Product::paginate(5);
+        return response()->json($data);
     }
 
     /**
@@ -46,6 +49,11 @@ class ProductController extends Controller
     public function show($id)
     {
         //
+        $product = Product::find($id);
+        if ($product) {
+            return response()->json($product);
+        }
+        return response()->json(['message' => 'product not found'], 404);
     }
 
     /**
@@ -80,5 +88,11 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+        $product = Product::find($id);
+        if ($product) {
+            $product->delete();
+            return response()->json(['message' => 'product delete correctly']);
+        }
+        return response()->json(['message' => 'product not found'], 404);
     }
 }

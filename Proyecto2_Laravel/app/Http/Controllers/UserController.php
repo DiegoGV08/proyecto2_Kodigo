@@ -15,7 +15,6 @@ class UserController extends Controller
     public function index()
     {
         //
-        // dd(5);
         $data = User::paginate(5);
         return response()->json($data);
     }

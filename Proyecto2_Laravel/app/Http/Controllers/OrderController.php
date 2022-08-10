@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,6 +15,8 @@ class OrderController extends Controller
     public function index()
     {
         //
+        $data = Order::paginate(5);
+        return response()->json($data);
     }
 
     /**
@@ -46,6 +49,11 @@ class OrderController extends Controller
     public function show($id)
     {
         //
+        $order = Order::find($id);
+        if ($order) {
+            return response()->json($order);
+        }
+        return response()->json(['message' => 'order not found'], 404);
     }
 
     /**
@@ -80,5 +88,11 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+        $order = Order::find($id);
+        if ($order) {
+            $order->delete();
+            return response()->json(['message' => 'order delete correctly']);
+        }
+        return response()->json(['message' => 'order not found'], 404);
     }
 }

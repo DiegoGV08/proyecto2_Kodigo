@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -14,6 +15,8 @@ class CategoryController extends Controller
     public function index()
     {
         //
+        $data = Category::paginate(5);
+        return response()->json($data);
     }
 
     /**
@@ -46,6 +49,11 @@ class CategoryController extends Controller
     public function show($id)
     {
         //
+        $category = Category::find($id);
+        if ($category) {
+            return response()->json($category);
+        }
+        return response()->json(['message' => 'category not found'], 404);
     }
 
     /**
@@ -80,5 +88,11 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+        $category = Category::find($id);
+        if ($category) {
+            $category->delete();
+            return response()->json(['message' => 'category delete correctly']);
+        }
+        return response()->json(['message' => 'category not found'], 404);
     }
 }

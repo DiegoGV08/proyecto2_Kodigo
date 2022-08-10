@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -14,6 +15,8 @@ class ClientController extends Controller
     public function index()
     {
         //
+        $data = Client::paginate(5);
+        return response()->json($data);
     }
 
     /**
@@ -46,6 +49,11 @@ class ClientController extends Controller
     public function show($id)
     {
         //
+        $client = Client::find($id);
+        if ($client) {
+            return response()->json($client);
+        }
+        return response()->json(['message' => 'client not found'], 404);
     }
 
     /**
@@ -80,5 +88,11 @@ class ClientController extends Controller
     public function destroy($id)
     {
         //
+        $client = Client::find($id);
+        if ($client) {
+            $client->delete();
+            return response()->json(['message' => 'client delete correctly']);
+        }
+        return response()->json(['message' => 'client not found'], 404);
     }
 }
