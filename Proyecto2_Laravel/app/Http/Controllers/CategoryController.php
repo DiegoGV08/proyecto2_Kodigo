@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -38,6 +39,29 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate(
+            [
+                'category_name' => 'required|string',
+                'category_description' => 'required|string'
+            ]
+        );
+
+        if ($request->id) {
+            $category = Category::find($request->id);
+        } else {
+            $category = new Category();
+        }
+
+        $category->category_name = $request->category_name;
+        $category->category_description = $request->category_description;
+
+        $category->save();
+        return response()->json(
+            [
+                'message' => 'category saved correctly',
+                'data' => $category
+            ]
+        );
     }
 
     /**
@@ -77,6 +101,25 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $category = Category::find($id);
+        if ($category) {
+
+            $validator = Validator::make($request->all(), [
+                'category_name' => 'required|string',
+                'category_description' => 'required|string'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'malformed request syntax'], 400);
+            } else {
+                $category->category_name = $request->category_name;
+                $category->category_description = $request->category_description;
+
+                $category->save();
+                return response()->json(['message' => 'category edited correctly', 'data' => $category]);
+            }
+        } else {
+            return response()->json(['message' => 'category not found'], 404);
+        }
     }
 
     /**

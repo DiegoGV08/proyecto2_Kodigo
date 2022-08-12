@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('telephone_number', 20);
             $table->string('birth_date', 20);
             $table->string('address', 20);
-            $table->string('password', 50);
+            $table->string('password', 100);
             $table->boolean("client_state")->default(1);
             $table->timestamps();
         });

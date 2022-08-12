@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -38,6 +39,31 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+
+        $validator = Validator::make($request->all(), [
+                'product_name' => 'required|string',
+                'product_description' => 'required|string',
+                'product_price' => 'required|numeric',
+                'product_state' => 'required|numeric'
+            ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'malformed request syntax'], 400);
+        }
+
+        $product = new product();
+
+        $product->product_name = $request->product_name;
+        $product->product_description = $request->product_description;
+        $product->product_price = $request->product_price;
+        $product->product_state = $request->product_state;
+
+        $product->save();
+        return response()->json(
+            [
+                'message' => 'product saved correctly',
+                'data' => $product
+            ]
+        );
     }
 
     /**
@@ -77,6 +103,29 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $product = Product::find($id);
+        if ($product) {
+
+            $validator = Validator::make($request->all(), [
+                'product_name' => 'required|string',
+                'product_description' => 'required|string',
+                'product_price' => 'required|numeric',
+                'product_state' => 'required|numeric'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'malformed request syntax'], 400);
+            } else {
+                $product->product_name = $request->product_name;
+                $product->product_description = $request->product_description;
+                $product->product_price = $request->product_price;
+                $product->product_state = $request->product_state;
+
+                $product->save();
+                return response()->json(['message' => 'product edited correctly', 'data' => $product]);
+            }
+        } else {
+            return response()->json(['message' => 'product not found'], 404);
+        }
     }
 
     /**

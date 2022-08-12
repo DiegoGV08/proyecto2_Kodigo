@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,13 +21,17 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group( function () {
+    Route::resource('category', CategoryController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::resource('client', ClientController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::resource('order', OrderController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::resource('product', ProductController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::resource('user', UserController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+
 });
 
-Route::resource('category', CategoryController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-Route::resource('client', ClientController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-Route::resource('order', OrderController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-Route::resource('order_detail', OrderDetailController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-Route::resource('product', ProductController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-Route::resource('user', UserController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+
+
+
+Route::post('/login', [LoginController::class, "loginprocess"]);
+

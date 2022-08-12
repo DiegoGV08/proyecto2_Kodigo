@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,8 +44,18 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $e) {
+            $response = [
+                "message" => ($e->getMessage()) ? $e->getMessage() : "Ruta no valida",
+                "line" => $e->getLine(),
+                "file" => $e->getFile(),
+            ];
+            Log::error(json_encode($response));
+
+            if (env("APP_DEBUG") == false) $response = ["message" => "Error en servicios web"];
+            else $response["trace"] = $e->getTrace();
+
+            return response()->json($response, 500);
         });
     }
 }

@@ -26,6 +26,17 @@ class ValidateOrderDetail implements Rule
     public function passes($attribute, $value)
     {
         //
+        foreach ($value as $detail) {
+
+            if (!isset($detail['product_quantity']) || !isset($detail['id_product'])) {
+                return false;
+            }
+
+            if (!is_numeric($detail['product_quantity']) || !is_numeric($detail['id_product'])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -35,6 +46,6 @@ class ValidateOrderDetail implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'Validate request syntax';
     }
 }
