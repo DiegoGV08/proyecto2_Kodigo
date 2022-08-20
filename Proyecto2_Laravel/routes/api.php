@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('order', OrderController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::resource('product', ProductController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::resource('user', UserController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::get('/login/user', [LoginController::class, "getuser"]);
 
 });
 

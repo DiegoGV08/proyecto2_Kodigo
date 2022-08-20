@@ -41,11 +41,12 @@ class ProductController extends Controller
         //
 
         $validator = Validator::make($request->all(), [
-                'product_name' => 'required|string',
-                'product_description' => 'required|string',
-                'product_price' => 'required|numeric',
-                'product_state' => 'required|numeric'
-            ]);
+            'product_name' => 'required|string',
+            'product_description' => 'required|string',
+            'product_price' => 'required|numeric',
+            'product_state' => 'required|numeric',
+            'id_category' => 'required|numeric'
+        ]);
         if ($validator->fails()) {
             return response()->json(['message' => 'malformed request syntax'], 400);
         }
@@ -56,6 +57,7 @@ class ProductController extends Controller
         $product->product_description = $request->product_description;
         $product->product_price = $request->product_price;
         $product->product_state = $request->product_state;
+        $product->id_category = $request->id_category;
 
         $product->save();
         return response()->json(
@@ -110,7 +112,8 @@ class ProductController extends Controller
                 'product_name' => 'required|string',
                 'product_description' => 'required|string',
                 'product_price' => 'required|numeric',
-                'product_state' => 'required|numeric'
+                'product_state' => 'required|numeric',
+                'id_category' => 'required|numeric'
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => 'malformed request syntax'], 400);
@@ -119,6 +122,7 @@ class ProductController extends Controller
                 $product->product_description = $request->product_description;
                 $product->product_price = $request->product_price;
                 $product->product_state = $request->product_state;
+                $product->id_category = $request->id_category;
 
                 $product->save();
                 return response()->json(['message' => 'product edited correctly', 'data' => $product]);

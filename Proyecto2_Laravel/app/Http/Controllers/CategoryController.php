@@ -134,7 +134,7 @@ class CategoryController extends Controller
         $category = Category::find($id);
         if ($category) {
             $category->delete();
-            return response()->json(['message' => 'category delete correctly']);
+            return response()->json(['message' => 'category deleted correctly']);
         }
         return response()->json(['message' => 'category not found'], 404);
     }

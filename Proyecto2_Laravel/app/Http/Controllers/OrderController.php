@@ -127,13 +127,17 @@ class OrderController extends Controller
 
             if($request->detail){
                 foreach ($request->detail as $totalDetail) {
-                    $order = OrderDetail::updateOrCreate(['id_order' => $order->id, 'id_product' => $totalDetail['id_product']], ['id_order' => $order->id, 'id_product' => $totalDetail['id_product'], 'product_quantity' => $totalDetail['product_quantity']]);
-                    $detail_id[] = $order->id;
+                    // dd(['id_order' => $order->id, 'id_product' => $totalDetail['id_product'], 'product_quantity' => $totalDetail['product_quantity']]);
+                    $orderDetail = OrderDetail::updateOrCreate(
+                        ['id_order' => $order->id, 'id_product' => $totalDetail['id_product']],
+                        ['id_order' => $order->id, 'id_product' => $totalDetail['id_product'], 'product_quantity' => $totalDetail['product_quantity']]
+                    );
+                    $detail_id[] = $orderDetail->id;
                 }
                 OrderDetail::where('id_order', '=', $order->id)->whereNotIn('id', $detail_id)->delete();
             }
 
-            return response()->json(['message' => 'order saved correctly', 'data' => $order]);
+            return response()->json(['message' => 'order edited correctly', 'data' => $order]);
         }
         else {
             return response()->json(['message'=>'order not found'], 404);
@@ -153,7 +157,7 @@ class OrderController extends Controller
         $order = Order::find($id);
         if ($order) {
             $order->delete();
-            return response()->json(['message' => 'order delete correctly']);
+            return response()->json(['message' => 'order deleted correctly']);
         }
         return response()->json(['message' => 'order not found'], 404);
     }

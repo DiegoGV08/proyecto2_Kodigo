@@ -66,7 +66,7 @@ class ClientController extends Controller
         $client->telephone_number = $request->telephone_number;
         $client->birth_date = $request->birth_date;
         $client->address = $request->address;
-        $client->password = $request->password;
+        $client->password = bcrypt($request->password);
         $client->client_state = $request->client_state;
 
         $client->save();
@@ -139,7 +139,7 @@ class ClientController extends Controller
                 $client->telephone_number = $request->telephone_number;
                 $client->birth_date = $request->birth_date;
                 $client->address = $request->address;
-                $client->password = $request->password;
+                $client->password = bcrypt($request->password);
                 $client->client_state = $request->client_state;
 
                 $client->save();
@@ -162,7 +162,7 @@ class ClientController extends Controller
         $client = Client::find($id);
         if ($client) {
             $client->delete();
-            return response()->json(['message' => 'client delete correctly']);
+            return response()->json(['message' => 'client deleted correctly']);
         }
         return response()->json(['message' => 'client not found'], 404);
     }

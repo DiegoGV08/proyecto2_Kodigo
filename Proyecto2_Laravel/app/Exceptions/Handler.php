@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
             ];
             Log::error(json_encode($response));
 
-            if (env("APP_DEBUG") == false) $response = ["message" => "Error en servicios web"];
+            if (env("APP_DEBUG") == false) $response = ["message" => "Error internal serve"];
             else $response["trace"] = $e->getTrace();
 
             return response()->json($response, 500);
